@@ -1,5 +1,5 @@
 # dnsServerRegUpdater
-Bind DNS server reg update POST agent/client.
+## Bind DNS server reg update POST agent/client.
 
 ### Instalation instructions:
 1. Install nodeJs sw ver 17.x.x.
