@@ -1,0 +1,37 @@
+;
+; BIND data file for linuxconfig.org
+;
+$TTL    1h
+@       IN      SOA     ns1.xxxx.com.ar. admin.xxxx.com.ar. (
+                          1        ; Serial
+                          1h       ; Refresh after 1 hours
+                          1h       ; Retry after 1 hour
+                          1w       ; Expire after 1 week
+                          1h )     ; Negative caching TTL of 1 day
+;
+@       IN      NS      ns1.xxxx.com.ar.
+@       IN      NS      ns2.xxxx.com.ar.
+
+
+xxxx.com.ar  IN      MX      10      mail.xxxx.com.ar.
+xxxx.com.ar  IN      A       181.165.110.2
+devops		IN	A	13.38.18.223
+jenkins		IN	A	13.38.18.223
+influx		IN	A	13.38.18.223
+grafana		IN	A	13.38.18.223
+devops-spain	IN	A	77.26.59.226
+devops-microservices	IN	A	15.236.18.225
+app		IN	A	35.180.175.210
+casamari	IN	A	201.231.248.98
+casayani	IN	A	191.83.167.101
+casapapamama	IN	A	181.165.110.2
+hub1		IN	A	190.195.125.236
+mqtt            IN      A       52.67.168.95
+ns1             IN      A       35.199.102.88
+ns2             IN      A       35.199.102.88
+vpn		IN	A	18.234.218.37
+www             IN      CNAME   xxxx.com.ar
+ftp             IN      CNAME   xxxx.com.ar
+cs		IN	CNAME	xxxx.com.ar
+cs2		IN	A	18.231.87.1
+wiki		IN	CNAME	xxxx.com.ar
