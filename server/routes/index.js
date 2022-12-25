@@ -1,13 +1,53 @@
 var express = require('express');
 var router = express.Router();
+fs = require('fs');
+const arrayToTxtFile = require('array-to-txt-file')
+const { exec } = require("child_process");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+
 router.post('/dns', function (req, res) {
-  console.log(req.body);
+  //console.log(req.body);
   res.send(req.body);
+
+  fs.readFile("/etc/bind/zones/master/YOUR_ZONE_FILENAME.DOMAIN", 'utf8', function (err,data) {
+  if (err) {
+    return console.log(err);
+  }
+  
+  let dataList = data.toString().split("\n")
+  let dataListToWrite = dataList.map(item => item.includes(req.body.hostname) ? req.body.hostname+"\tIN\tA\t"+req.body.ip: item )
+
+  arrayToTxtFile(dataListToWrite, './db/db.temp', err => {
+    if(err) {
+      console.error(err)
+      return
+      }
+    })
+
+  fs.copyFile('./db/db.temp', '/etc/bind/zones/master/<YOUR_ZONE_FILENAME.DOMAIN>', (err) => {
+  if (err) throw err;
+  console.log('Zone config file was copied');
+  });
+
+  exec("/etc/init.d/bind9 restart", (error, stdout, stderr) => {
+      if (error) {
+          console.log(`error: ${error.message}`);
+          return;
+      }
+      if (stderr) {
+          console.log(`stderr: ${stderr}`);
+          return;
+      }
+      console.log(`stdout: ${stdout}`);
+  });
+
+  });
+
 });
+
 
 module.exports = router;
