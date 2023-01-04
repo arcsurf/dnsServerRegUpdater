@@ -17,14 +17,12 @@ router.post('/dns', function (req, res) {
   if (err) {
     return console.log(err);
   }
-    
-  
   let dataList = data.toString().split("\n")
   dataList.pop()
-  //console.log(dataList)
+  console.log(dataList)
 
-  /* Your db.YOUR_DOMAIN file content must be created, and use TAB as a separatar fields between DOMAIN_NAME REG_TYPE IP ETC*/
   let dataListToWrite = dataList.map(item => item.includes(req.body.hostname) ? req.body.hostname+"\tIN\tA\t"+req.body.ip: item )
+
   //console.log(dataListToWrite)
 
   if(dataListToWrite.indexOf('') !== -1)
@@ -56,8 +54,11 @@ router.post('/dns', function (req, res) {
   }
   else
   {
-          console.log("no changes");
+          console.log("No changes");
   }
+
+
+
 
   });
 
