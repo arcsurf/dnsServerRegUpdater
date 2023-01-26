@@ -11,7 +11,7 @@ echo $date
 #Check if file exist
 if [ ! -f registeredIp.log ]
 then
-        touch registeredIp.log
+        echo "$ip" > registeredIp.log
 fi
 
 #Reading client public ip assigned and ip address into file registrered.
