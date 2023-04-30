@@ -3,25 +3,13 @@ ip=`curl ifconfig.me`
 host=`cat /etc/hostname`
 timestamp=`date +%s%N`
 date=`date +%D`
-echo $ip
-echo $host
-echo $timestamp
-echo $date
 
-#Check if file exist
-if [ ! -f registeredIp.log ]
-then
-        echo "$ip" > registeredIp.log
+#Check if IP address is the same between DNS server and VPNServer Host IP:
+registeredIp=`curl -X GET "http://35.199.102.88:3000/host/${host}"`
+
+#Reading client public ip assigned and check new ip address registrered in VPN server, and update on DNS server.     
+if [ $ip != $registeredIp ]; then
+  curl -X POST http://x.x.x.x:3000/dns -H 'Content-Type: application/json' -d '{"ip":"'${ip}'","hostname":"'${host}'","timestamp":"'${timestamp}'","date":"'${date}'"}'
+else
+  echo "The Ip assigned is not updated"
 fi
-
-#Reading client public ip assigned and ip address into file registrered.
-while IFS= read -r registeredIp; do
-     
-  if [ $ip != $registeredIp ]; then
-    curl -X POST http://x.x.x.x:3000/dns -H 'Content-Type: application/json' -d '{"ip":"'${ip}'","hostname":"'${host}'","timestamp":"'${timestamp}'","date":"'${date}'"}'
-    echo $ip > registeredIp.log
-  else
-    echo "The Ip assigned is not updated"
-  fi
-
-done < registeredIp.log
