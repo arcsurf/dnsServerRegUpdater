@@ -51,18 +51,47 @@ router.post('/dns', function (req, res) {
         }
         console.log(`stdout: ${stdout}`);
     });
+
+    async function init() {
+      console.log(1);
+      await sleep(1000);
+      console.log(2);
+    }
+
+    function sleep(ms) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, 1000);
+      });
+    }
+
   }
   else
   {
-          console.log("No changes");
+          console.log("No hay cambios");
   }
-
-
-
 
   });
 
 });
 
+/* GET home page. */
+router.get('/host/:hostName', function(req, res, next) {
+  const hostName = req.params.hostName
+
+    exec(`cat /etc/bind/zones/master/db.couso.com.ar | grep '${hostName}'`, (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+        //   res.send(`IPAddress`)
+          res.send(stdout.match(/\d+\.\d+\.\d+\.\d+/g)[0]);
+        });
+
+});
 
 module.exports = router;
